@@ -3,7 +3,7 @@ path = require('path'),
 Twit = require('twit'),
 twemoji = require('twemoji'),
 cheerio = require('cheerio'),
-config = require(path.join(__dirname, 'config.js'))
+config = require(path.join(__dirname, 'config.js')),
 base64Img = require('base64-img');
 
 var imagePath = get_random_topping();
