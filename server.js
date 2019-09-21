@@ -4,13 +4,62 @@ Twit = require('twit'),
 twemoji = require('twemoji'),
 cheerio = require('cheerio'),
 config = require(path.join(__dirname, 'config.js'))
-
+base64Img = require('base64-img');
 
 var imagePath = get_random_topping();
 
 var T = new Twit(config);
-T.post('statuses/update', {status: imagePath}, function(err, data, response){ console.log (data)});
 
+upload_image(imagePath);
+
+
+function upload_image(imagePath)
+{
+    //download from specified URL
+  //  var filename = download_image(imagePath);
+console.log(imagePath + 'aaa');
+   // console.log('ok, ' + filename)
+    //now upload to twitter
+
+   // b64Img = fs.readFileSync(filename, {encoding: 'base64' });
+
+     base64Img.requestBase64(imagePath, function(err, response, body){
+        if(err) 
+        {
+            console.log(err)
+        }
+        else
+        {
+            
+                console.log(body);
+                T.post('media/upload', {media_data: body.replace("data:image/png;base64,", "") }, function (err, data, response) {
+                    if(err){
+                        console.log('ERROR:' + err);
+                    }
+                    else
+                    {
+                        console.log('image uploaded, tweeting');
+                        T.post('statuses/update', {
+                                media_ids: new Array(data.media_id_string)
+                        },
+                            function(err, data, response) {
+                                    if(err)
+                                    {
+                                        console.log('ERROR' + err);
+                                        
+                                    }
+                                    else{ 
+                                        console.log('success!');
+                                    }
+                                }
+                            );
+                        }
+                    }
+                    );
+            }
+        });
+         
+}
 
 function combine_toppings_and_crust()
 {
