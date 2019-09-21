@@ -32,7 +32,7 @@ console.log(imagePath + 'aaa');
         {
             
                 console.log(body);
-                T.post('media/upload', {media_data: body.replace("data:image/png;base64,", "") }, function (err, data, response) {
+                T.post('media/upload', {media_data: body.replace("data:image/svg+xml;base64,", "") }, function (err, data, response) {
                     if(err){
                         console.log('ERROR:' + err);
                     }
@@ -70,7 +70,8 @@ function get_random_topping()
 {
     console.log('getting topping');
 
-    var div = twemoji.parse('\ud83c\udf55');
+    var div = twemoji.parse('\ud83c\udf55', { folder: 'svg', ext: '.svg'});
+
     var parsed = cheerio.load(div);
 
     //console.log(parsed);
