@@ -5,7 +5,9 @@ config = require(path.join(__dirname, 'config.js')),
 fs = require('fs'),
 svg2img = require('svg2img'),
 btoa = require('btoa'),
-emoji = require('./emoji.js');
+emoji = require('./emoji.js'),
+mergeImages = require('merge-images'),
+Canvas = require('canvas');
 
 T = new Twit(config);
 
@@ -55,19 +57,29 @@ function make_pizza(selectedToppings)
                             console.log(error);
                             return;
                         }
-                        fs.writeFileSync('./temp1.png', buffer);
+                        console.log(buffer);
+                        fs.writeFileSync('./sauce.png', buffer);
 
 
 
                     //now manipulate the image
-        
-                    //now upload it.
-                    var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' pizza';
-                    console.log(description);
-                    upload_image('./result.png', description);
-                
-                    
-                    console.log('yay');
+                    mergeImages(['./crust.png', './sauce.png', './top1.png'], { 
+                        Canvas: Canvas 
+                        })
+                        .then(function(b64){
+                            var b64data = b64.replace(/^data:image\/png;base64,/, "");
+                            fs.writeFile('./result.png', b64data, 'base64', function(err){
+                                console.log(err);
+                            });
+                            //console.log(b64);
+                            //now upload it.
+                            var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' pizza';
+                            console.log(description);
+                            upload_image('./result.png', description);
+                        
+                            
+                            console.log('yay');
+                        });
                     });
                 });
             });
@@ -76,7 +88,7 @@ function make_pizza(selectedToppings)
     
 }
 
-function upload_image(imagePath)
+function upload_image(imagePath, descrip)
 {
     //now upload to twitter
     var b64Img = fs.readFileSync(imagePath, { encoding: 'base64' });
