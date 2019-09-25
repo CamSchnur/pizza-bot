@@ -13,39 +13,68 @@ console.log('* generating toppings...')
 var allToppings = new Array();
 generate_toppings_list();
 
-
 console.log('* selecting rando toppings...')
 var selectedToppings = new Array();
 selectedToppings.push(get_random_topping());
 selectedToppings.push(get_random_topping());
 
+var crust = new emoji('Yellow Circle', '\ud83d\udfe1');
+var sauce = new emoji('Red Circle', '\ud83d\udd34')
+
 console.log('* saving topping to png');
-svg2img('https://twemoji.maxcdn.com/v/12.1.3/svg/1f355.svg', function(error, buffer){
-    if(error)
-    {
-        console.log('yo');
-    }
-    console.log('* got it, writing to file')
-    fs.writeFileSync('./hello.png', buffer);
-    console.log('* saved')
-});
+make_pizza(selectedToppings);
 
-console.log('* dl image');
-console.log(selectedToppings[0].emojiPath);
-svg2img(selectedToppings[0].emojiPath, {'width':1000, 'height':1000}, function(error, buffer) {
-    if(error)
-    {
-        console.log(error);
-        return;
-    }
-    fs.writeFileSync('./temp1.png', buffer);
+function make_pizza(selectedToppings)
+{
+    svg2img(selectedToppings[0].emojiPath, {'width':1000, 'height':1000}, function(error, buffer) {
+        if(error)
+        {
+            console.log(error);
+            return;
+        }
+        fs.writeFileSync('./top1.png', buffer);
+            svg2img(selectedToppings[1].emojiPath, {'width':1000, 'height':1000}, function(error, buffer) {
+                if(error)
+                {
+                    console.log(error);
+                    return;
+                }
+                fs.writeFileSync('./top2.png', buffer);
 
-    upload_image('./temp1.png');
+                svg2img(crust.emojiPath, {'width':1000, 'height':1000}, function(error, buffer) {
+                    if(error)
+                    {
+                        console.log(error);
+                        return;
+                    }
+                    fs.writeFileSync('./crust.png', buffer);
+              
+                    svg2img(sauce.emojiPath, {'width':1000, 'height':1000}, function(error, buffer) {
+                        if(error)
+                        {
+                            console.log(error);
+                            return;
+                        }
+                        fs.writeFileSync('./temp1.png', buffer);
 
+
+
+                    //now manipulate the image
+        
+                    //now upload it.
+                    var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' pizza';
+                    console.log(description);
+                    upload_image('./result.png', description);
+                
+                    
+                    console.log('yay');
+                    });
+                });
+            });
+
+        });
     
-    console.log('yay');
-    });
-
+}
 
 function upload_image(imagePath)
 {

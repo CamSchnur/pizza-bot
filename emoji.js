@@ -5,7 +5,7 @@ class emoji
 {
     constructor(emojiName, emojiUnicode)
     {
-        var div = twemoji.parse('\ud83c\udf55', { folder: 'svg', ext: '.svg'});
+        var div = twemoji.parse(emojiUnicode, { folder: 'svg', ext: '.svg'});
         var parsed = cheerio.load(div);
         var src = parsed('img').attr('src');
     
