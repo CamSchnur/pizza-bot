@@ -1,58 +1,56 @@
 var fs = require('fs'),
 path = require('path'),
 Twit = require('twit'),
-twemoji = require('twemoji'),
-cheerio = require('cheerio'),
 config = require(path.join(__dirname, 'config.js')),
 fs = require('fs'),
 svg2img = require('svg2img'),
-btoa = require('btoa');
+btoa = require('btoa'),
+emoji = require('./emoji.js');
 
-class emoji
-{
-    constructor(emojiName, emojiUnicode)
-    {
-        var div = twemoji.parse('\ud83c\udf55', { folder: 'svg', ext: '.svg'});
-        var parsed = cheerio.load(div);
-        var src = parsed('img').attr('src');
-    
-        this.emojiName = emojiName;
-        this.emojiPath = src;
-    }
-}
+T = new Twit(config);
 
+console.log('* generating toppings...')
 var allToppings = new Array();
-
 generate_toppings_list();
 
+
+console.log('* selecting rando toppings...')
 var selectedToppings = new Array();
-
 selectedToppings.push(get_random_topping());
 selectedToppings.push(get_random_topping());
 
-var fileName = download_image(selectedToppings[0].emojiPath);
+console.log('* saving topping to png');
+svg2img('https://twemoji.maxcdn.com/v/12.1.3/svg/1f355.svg', function(error, buffer){
+    if(error)
+    {
+        console.log('yo');
+    }
+    console.log('* got it, writing to file')
+    fs.writeFileSync('./hello.png', buffer);
+    console.log('* saved')
+});
 
-var T = new Twit(config);
+console.log('* dl image');
+console.log(selectedToppings[0].emojiPath);
+svg2img(selectedToppings[0].emojiPath, {'width':1000, 'height':1000}, function(error, buffer) {
+    if(error)
+    {
+        console.log(error);
+        return;
+    }
+    fs.writeFileSync('./temp1.png', buffer);
 
-upload_image(fileName);
+    upload_image('./temp1.png');
 
+    
+    console.log('yay');
+    });
 
-function download_image(imagePath)
-{
-    console.log('downloading image: ' + imagePath)
-    svg2img(imagePath, {'width':1000, 'height':1000}, function(error, buffer) {
-        console.log('writing to file...');
-        fs.writeFileSync('./temp1.png', buffer)
-        console.log('wrote to file');
-        });
-}
 
 function upload_image(imagePath)
 {
     //now upload to twitter
     var b64Img = fs.readFileSync(imagePath, { encoding: 'base64' });
-
-    console.log(body);
 
     T.post('media/upload', {media_data: b64Img }, 
         function (err, data, response) 
