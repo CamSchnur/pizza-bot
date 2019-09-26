@@ -7,7 +7,8 @@ svg2img = require('svg2img'),
 btoa = require('btoa'),
 emoji = require('./emoji.js'),
 mergeImages = require('merge-images'),
-Canvas = require('canvas');
+Canvas = require('canvas'),
+sharp = require('sharp');
 
 T = new Twit(config);
 
@@ -20,8 +21,9 @@ var selectedToppings = new Array();
 selectedToppings.push(get_random_topping());
 selectedToppings.push(get_random_topping());
 
-var crust = new emoji('Yellow Circle', '\ud83d\udfe1');
-var sauce = new emoji('Red Circle', '\ud83d\udd34')
+var cheese = new emoji('Yellow Circle', '\ud83d\udfe1');
+var sauce = new emoji('Red Circle', '\ud83d\udd34');
+var crust = new emoji('Brown Cirlce', '\ud83d\udfe4');
 
 console.log('* saving topping to png');
 make_pizza(selectedToppings);
@@ -50,41 +52,104 @@ function make_pizza(selectedToppings)
                         return;
                     }
                     fs.writeFileSync('./crust.png', buffer);
-              
-                    svg2img(sauce.emojiPath, {'width':1000, 'height':1000}, function(error, buffer) {
+                
+                    svg2img(cheese.emojiPath, {'width':1000, 'height':1000}, function(error, buffer) {
                         if(error)
                         {
                             console.log(error);
                             return;
                         }
-                        console.log(buffer);
-                        fs.writeFileSync('./sauce.png', buffer);
+                        fs.writeFileSync('./cheese.png', buffer);
+                    
+                        svg2img(sauce.emojiPath, {'width':1000, 'height':1000}, function(error, buffer) {
+                            if(error)
+                            {
+                                console.log(error);
+                                return;
+                            }
+                            console.log(buffer);
+                            fs.writeFileSync('./sauce.png', buffer);
+
+                        //now let's get our topping sizes right.
+                        sharp('./cheese.png').resize(850, 850).toFile('./cheese2.png', (err, info) => {
+                             sharp('./sauce.png').resize(900, 900).toFile('./sauce2.png', (err, info) => {
+
+                                sharp('./top1.png').resize(100, 100).toFile('./top1r.png', (err, info) => {
+                                    sharp('./top2.png').resize(100, 100).toFile('./top2r.png', (err, info) => {
+                        //now manipulate the image
+                                        mergeImages([
+                                            {src: './white.png', x:0, y:0 },
+                                            {src: './crust.png', x:388, y:0 },
+                                            {src: './sauce2.png', x:438, y:50  },
+                                            {src: './cheese2.png', x:463, y:75 },
+
+
+                                            {src: './top1r.png', x:848, y:102 },
+                                            {src: './top1r.png', x:1121, y:290 },
+                                            {src: './top1r.png', x:920, y:787 },
+                                            {src: './top1r.png', x:688, y:730 },
+                                            {src: './top1r.png', x:516, y:501 },
+                                            {src: './top1r.png', x:602, y:220 },
+                                            {src: './top1r.png', x:667, y:387 },
+                                            {src: './top1r.png', x:838, y:407 },
+                                            {src: './top1r.png', x:838, y:250 },
+                                            {src: './top1r.png', x:1038, y:490 },
+                                            {src: './top1r.png', x:1121, y:600 },
+                                            {src: './top1r.png', x:845, y:658 },
 
 
 
-                    //now manipulate the image
-                    mergeImages(['./crust.png', './sauce.png', './top1.png'], { 
-                        Canvas: Canvas 
-                        })
-                        .then(function(b64){
-                            var b64data = b64.replace(/^data:image\/png;base64,/, "");
-                            fs.writeFile('./result.png', b64data, 'base64', function(err){
-                                console.log(err);
+
+                                            {src: './top2r.png', x:700, y:135 },
+                                            {src: './top2r.png', x:1000, y:160 } ,
+                                            {src: './top2r.png', x:500, y:340 } ,
+                                            {src: './top2r.png', x:1000, y:174 } ,
+                                            {src: './top2r.png', x:970, y:360 } ,
+                                            {src: './top2r.png', x:1160, y:441 } ,
+                                            {src: './top2r.png', x:667, y:560 } ,
+                                            {src: './top2r.png', x:794, y:519 } ,
+                                            {src: './top2r.png', x:548, y:650 } ,
+                                            {src: './top2r.png', x:968, y:600 } ,
+                                            {src: './top2r.png', x:796, y:770 } ,
+                                            {src: './top2r.png', x:1038, y:750 } 
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        ],
+                                            
+                                            {
+                                            Canvas: Canvas 
+                                            })
+                                            .then(function(b64){
+                                                var b64data = b64.replace(/^data:image\/png;base64,/, "");
+                                                fs.writeFile('./result.png', b64data, 'base64', function(err)
+                                                {
+                                                    //console.log(b64);
+                                                    //now upload it.
+                                                    var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' pizza';
+                                                    console.log(description);
+                                                    upload_image('./result.png', description);
+                                                    
+                                                    
+                                                    console.log('yay');
+                                                    console.log(err);
+                                                });
+                                            });
+                                        });
+                                    });
                             });
-                            //console.log(b64);
-                            //now upload it.
-                            var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' pizza';
-                            console.log(description);
-                            upload_image('./result.png', description);
-                        
-                            
-                            console.log('yay');
                         });
+
                     });
                 });
             });
-
         });
+    });
+
     
 }
 
@@ -105,7 +170,8 @@ function upload_image(imagePath, descrip)
                 console.log('image uploaded, tweeting');
                 T.post('statuses/update', 
                     {
-                            media_ids: new Array(data.media_id_string)
+                            media_ids: new Array(data.media_id_string),
+                            status: descrip
                     },
                     function(err, data, response) 
                     {
