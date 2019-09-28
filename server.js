@@ -1,5 +1,4 @@
 var fs = require('fs'),
-fs = require('fs'),
 svg2img = require('svg2img'),
 path = require('path'),
 btoa = require('btoa'),
@@ -11,9 +10,9 @@ express = require('express'),
 twitter = require(__dirname + '/twitter.js'),
 app = express();
 
-app.user(express.static('public'));
+app.use(express.static('public'));
 
-app.all(`process.env.BOT_ENDPOINT}`, function(req, res) {
+app.all(`${process.env.BOT_ENDPOINT}`, function(req, res) {
 
 
 console.log('* generating toppings...')

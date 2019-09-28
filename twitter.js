@@ -1,4 +1,5 @@
-var Twit = require('twit');
+var Twit = require('twit'),
+fs = require('fs');
 
 function upload_image(imagePath, descrip)
 {
