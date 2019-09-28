@@ -1,7 +1,9 @@
 var Twit = require('twit'),
 fs = require('fs');
-
-function upload_image(imagePath, descrip)
+var T;
+module.exports = 
+  {
+upload_image: function(imagePath, descrip)
 {
     T = new Twit({
         consumer_key:         process.env.consumer_key,
@@ -44,4 +46,5 @@ function upload_image(imagePath, descrip)
             }
     );
 
-}
+  }
+};

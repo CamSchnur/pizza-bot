@@ -26,7 +26,6 @@ app.get('/', (request, response) => {
 app.all(`${process.env.BOT_ENDPOINT}`, function(req, res) {
 //app.get('/tweet', (req, res) => {
 
-
 console.log('* generating toppings...')
 allToppings = new Array();
 generate_toppings_list();
@@ -41,7 +40,7 @@ sauce = new emoji('Red Circle', '\ud83d\udd34');
 crust = new emoji('Brown Circle', '\ud83d\udfe4');
 
 console.log('* saving topping to png');
-make_pizza(selectedToppings);
+make_pizza(selectedToppings)
 
 });
 
@@ -152,13 +151,14 @@ function make_pizza(selectedToppings)
                                                 {
                                                     //console.log(b64);
                                                     //now upload it.
-                                                    var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' pizza';
+                                                    var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' Pizza';
                                                     console.log(description);
                                                     twitter.upload_image('./.data/result.png', description);
                                                     
                                                     
                                                     console.log('yay');
                                                     console.log(err);
+                                                  
                                                 });
                                             });
                                         });
