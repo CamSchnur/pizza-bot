@@ -39,6 +39,7 @@ upload_image: function(imagePath, descrip)
                             }
                             else{ 
                                 console.log('success!');
+                              fs.deleteFileSync(imagePath);
                             }
                         }
                     );

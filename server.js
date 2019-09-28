@@ -40,8 +40,8 @@ sauce = new emoji('Red Circle', '\ud83d\udd34');
 crust = new emoji('Brown Circle', '\ud83d\udfe4');
 
 console.log('* saving topping to png');
-make_pizza(selectedToppings)
-
+make_pizza(selectedToppings);
+return res.send('success!');
 });
 
 var listener = app.listen(process.env.PORT, function()
