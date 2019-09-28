@@ -25,6 +25,7 @@
     "cheerio": "^1.0.0-rc.3",
     "express": "^4.17.1",
     "merge-images": "^1.1.0",
+    "merge-images-v2": "^2.0.1",
     "sharp": "^0.23.0",
     "svg2img": "^0.6.1",
     "twemoji": "^12.1.3",
