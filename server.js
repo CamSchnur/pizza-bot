@@ -11,7 +11,11 @@ twitter = require(__dirname + '/twitter.js'),
 app = express(),
 Twit = require('twit');
 
-
+var allToppings;
+var cheese;
+var sauce;
+var crust;
+var selectedToppings;
 
 app.use(express.static('public'));
 
@@ -24,17 +28,17 @@ app.all(`${process.env.BOT_ENDPOINT}`, function(req, res) {
 
 
 console.log('* generating toppings...')
-var allToppings = new Array();
+allToppings = new Array();
 generate_toppings_list();
 
 console.log('* selecting rando toppings...')
-var selectedToppings = new Array();
+selectedToppings = new Array();
 selectedToppings.push(get_random_topping());
 selectedToppings.push(get_random_topping());
 
-var cheese = new emoji('Yellow Circle', '\ud83d\udfe1');
-var sauce = new emoji('Red Circle', '\ud83d\udd34');
-var crust = new emoji('Brown Circle', '\ud83d\udfe4');
+cheese = new emoji('Yellow Circle', '\ud83d\udfe1');
+sauce = new emoji('Red Circle', '\ud83d\udd34');
+crust = new emoji('Brown Circle', '\ud83d\udfe4');
 
 console.log('* saving topping to png');
 make_pizza(selectedToppings);
@@ -294,47 +298,3 @@ function addTopping(emojiName, emojiUnicode)
     console.log('added topping ' + emojiName)
 }
 
-function upload_image(imagePath, descrip)
-{
-    T = new Twit({
-        consumer_key:         process.env.consumer_key,
-        consumer_secret:      process.env.consumer_secret,
-        access_token:         process.env.access_token,
-        access_token_secret:  process.env.access_token_secret
-      })
-      
-    //now upload to twitter
-    var b64Img = fs.readFileSync(imagePath, { encoding: 'base64' });
-
-    T.post('media/upload', {media_data: b64Img }, 
-        function (err, data, response) 
-        {
-            if(err)
-            {
-                console.log('ERROR:' + err);
-            }
-            else
-            {
-                console.log('image uploaded, tweeting');
-                T.post('statuses/update', 
-                    {
-                            media_ids: new Array(data.media_id_string),
-                            status: descrip
-                    },
-                    function(err, data, response) 
-                    {
-                            if(err)
-                            {
-                                console.log('ERROR' + err);
-                                
-                            }
-                            else{ 
-                                console.log('success!');
-                            }
-                        }
-                    );
-                }
-            }
-    );
-
-}
