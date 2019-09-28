@@ -1,20 +1,20 @@
 var fs = require('fs'),
-path = require('path'),
-Twit = require('twit'),
 fs = require('fs'),
 svg2img = require('svg2img'),
+path = require('path'),
 btoa = require('btoa'),
 emoji = require('./emoji.js'),
 mergeImages = require('merge-images'),
 Canvas = require('canvas'),
-sharp = require('sharp');
+sharp = require('sharp'),
+express = require('express'),
+twitter = require(__dirname + '/twitter.js'),
+app = express();
 
-T = new Twit({
-  consumer_key:         process.env.consumer_key,
-  consumer_secret:      process.env.consumer_secret,
-  access_token:         process.env.access_token,
-  access_token_secret:  process.env.access_token_secret
-})
+app.user(express.static('public'));
+
+app.all(`process.env.BOT_ENDPOINT}`, function(req, res) {
+
 
 console.log('* generating toppings...')
 var allToppings = new Array();
@@ -31,6 +31,13 @@ var crust = new emoji('Brown Cirlce', '\ud83d\udfe4');
 
 console.log('* saving topping to png');
 make_pizza(selectedToppings);
+
+});
+
+var listener = app.listen(process.env.PORT, function()
+{
+    console.log('bot is listening on port #' + listener.address().port);
+});
 
 function make_pizza(selectedToppings)
 {
@@ -136,7 +143,7 @@ function make_pizza(selectedToppings)
                                                     //now upload it.
                                                     var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' pizza';
                                                     console.log(description);
-                                                    upload_image('./result.png', description);
+                                                    twitter.upload_image('./result.png', description);
                                                     
                                                     
                                                     console.log('yay');
@@ -164,59 +171,13 @@ function get_random_offset()
     return offset - 5;
 
 }
-function upload_image(imagePath, descrip)
-{
-    //now upload to twitter
-    var b64Img = fs.readFileSync(imagePath, { encoding: 'base64' });
 
-    T.post('media/upload', {media_data: b64Img }, 
-        function (err, data, response) 
-        {
-            if(err)
-            {
-                console.log('ERROR:' + err);
-            }
-            else
-            {
-                console.log('image uploaded, tweeting');
-                T.post('statuses/update', 
-                    {
-                            media_ids: new Array(data.media_id_string),
-                            status: descrip
-                    },
-                    function(err, data, response) 
-                    {
-                            if(err)
-                            {
-                                console.log('ERROR' + err);
-                                
-                            }
-                            else{ 
-                                console.log('success!');
-                            }
-                        }
-                    );
-                }
-            }
-    );
-
-}
-
-function combine_toppings_and_crust()
-{
-
-}
 
 function get_random_topping()
 {
     console.log('getting topping');
     var index = Math.floor(Math.random() * allToppings.length);
     return allToppings[index];
-}
-
-function generate_crust()
-{
-
 }
 
 function generate_toppings_list()
@@ -319,6 +280,7 @@ function generate_toppings_list()
     //flan
   
 }
+
 function addTopping(emojiName, emojiUnicode)
 {
     allToppings.push(new emoji(emojiName, emojiUnicode));
