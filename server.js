@@ -78,40 +78,40 @@ function make_pizza(selectedToppings)
                                     sharp('./top2.png').resize(100, 100).toFile('./top2r.png', (err, info) => {
                         //now manipulate the image
                                         mergeImages([
-                                            {src: './white.png', x:0, y:0 },
-                                            {src: './crust.png', x:388, y:0 },
-                                            {src: './sauce2.png', x:438, y:50  },
-                                            {src: './cheese2.png', x:463, y:75 },
+                                            {src: './white.png', x:0+get_random_offset(), y:0+get_random_offset() },
+                                            {src: './crust.png', x:388+get_random_offset(), y:0+get_random_offset() },
+                                            {src: './sauce2.png', x:438+get_random_offset(), y:50+get_random_offset() },
+                                            {src: './cheese2.png', x:463+get_random_offset(), y:75+get_random_offset() },
 
 
-                                            {src: './top1r.png', x:848, y:102 },
-                                            {src: './top1r.png', x:1121, y:290 },
-                                            {src: './top1r.png', x:920, y:787 },
-                                            {src: './top1r.png', x:688, y:730 },
-                                            {src: './top1r.png', x:516, y:501 },
-                                            {src: './top1r.png', x:602, y:220 },
-                                            {src: './top1r.png', x:667, y:387 },
-                                            {src: './top1r.png', x:838, y:407 },
-                                            {src: './top1r.png', x:838, y:250 },
-                                            {src: './top1r.png', x:1038, y:490 },
-                                            {src: './top1r.png', x:1121, y:600 },
-                                            {src: './top1r.png', x:845, y:658 },
+                                            {src: './top1r.png', x:848+get_random_offset(), y:102+get_random_offset() },
+                                            {src: './top1r.png', x:1121+get_random_offset(), y:290+get_random_offset() },
+                                            {src: './top1r.png', x:920+get_random_offset(), y:787+get_random_offset() },
+                                            {src: './top1r.png', x:688+get_random_offset(), y:730+get_random_offset() },
+                                            {src: './top1r.png', x:516+get_random_offset(), y:501+get_random_offset() },
+                                            {src: './top1r.png', x:602+get_random_offset(), y:220+get_random_offset() },
+                                            {src: './top1r.png', x:667+get_random_offset(), y:387+get_random_offset() },
+                                            {src: './top1r.png', x:838+get_random_offset(), y:407+get_random_offset() },
+                                            {src: './top1r.png', x:865+get_random_offset(), y:268+get_random_offset() },
+                                            {src: './top1r.png', x:1038+get_random_offset(), y:490+get_random_offset() },
+                                            {src: './top1r.png', x:1121+get_random_offset(), y:600+get_random_offset() },
+                                            {src: './top1r.png', x:845+get_random_offset(), y:658+get_random_offset() },
 
 
 
 
-                                            {src: './top2r.png', x:700, y:135 },
-                                            {src: './top2r.png', x:1000, y:160 } ,
-                                            {src: './top2r.png', x:500, y:340 } ,
-                                            {src: './top2r.png', x:1000, y:174 } ,
-                                            {src: './top2r.png', x:970, y:360 } ,
-                                            {src: './top2r.png', x:1160, y:441 } ,
-                                            {src: './top2r.png', x:667, y:560 } ,
-                                            {src: './top2r.png', x:794, y:519 } ,
-                                            {src: './top2r.png', x:548, y:650 } ,
-                                            {src: './top2r.png', x:968, y:600 } ,
-                                            {src: './top2r.png', x:796, y:770 } ,
-                                            {src: './top2r.png', x:1038, y:750 } 
+                                            {src: './top2r.png', x:700+get_random_offset(), y:135+get_random_offset() },
+                                            {src: './top2r.png', x:1000+get_random_offset(), y:160+get_random_offset() } ,
+                                            {src: './top2r.png', x:500+get_random_offset(), y:340+get_random_offset() } ,
+                                            {src: './top2r.png', x:750+get_random_offset(), y:288+get_random_offset() } ,
+                                            {src: './top2r.png', x:970+get_random_offset(), y:360+get_random_offset() } ,
+                                            {src: './top2r.png', x:1160+get_random_offset(), y:441+get_random_offset() } ,
+                                            {src: './top2r.png', x:667+get_random_offset(), y:560+get_random_offset() } ,
+                                            {src: './top2r.png', x:794+get_random_offset(), y:519+get_random_offset() } ,
+                                            {src: './top2r.png', x:548+get_random_offset(), y:650+get_random_offset() } ,
+                                            {src: './top2r.png', x:968+get_random_offset(), y:600+get_random_offset() } ,
+                                            {src: './top2r.png', x:796+get_random_offset(), y:770+get_random_offset() } ,
+                                            {src: './top2r.png', x:1038+get_random_offset(), y:750+get_random_offset() } 
                                         
                                         
                                         
@@ -153,6 +153,13 @@ function make_pizza(selectedToppings)
     
 }
 
+function get_random_offset()
+{
+    var offset = (Math.random() * 10);
+
+    return offset - 5;
+
+}
 function upload_image(imagePath, descrip)
 {
     //now upload to twitter
