@@ -1,7 +1,6 @@
 var fs = require('fs'),
 path = require('path'),
 Twit = require('twit'),
-config = require(path.join(__dirname, 'config.js')),
 fs = require('fs'),
 svg2img = require('svg2img'),
 btoa = require('btoa'),
@@ -10,7 +9,12 @@ mergeImages = require('merge-images'),
 Canvas = require('canvas'),
 sharp = require('sharp');
 
-T = new Twit(config);
+T = new Twit({
+  consumer_key:         process.env.consumer_key,
+  consumer_secret:      process.env.consumer_secret,
+  access_token:         process.env.access_token,
+  access_token_secret:  process.env.access_token_secret
+})
 
 console.log('* generating toppings...')
 var allToppings = new Array();
@@ -122,7 +126,7 @@ function make_pizza(selectedToppings)
                                         ],
                                             
                                             {
-                                            Canvas: Canvas 
+                                            Canvas: Canvas
                                             })
                                             .then(function(b64){
                                                 var b64data = b64.replace(/^data:image\/png;base64,/, "");
