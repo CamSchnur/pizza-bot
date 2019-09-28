@@ -42,7 +42,6 @@ crust = new emoji('Brown Circle', '\ud83d\udfe4');
 console.log('* saving topping to png');
 make_pizza(selectedToppings)
 
-res.send('done!');
 });
 
 var listener = app.listen(process.env.PORT, function()
@@ -159,6 +158,7 @@ function make_pizza(selectedToppings)
                                                     
                                                     console.log('yay');
                                                     console.log(err);
+                                                  
                                                 });
                                             });
                                         });
