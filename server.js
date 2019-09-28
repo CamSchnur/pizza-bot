@@ -8,11 +8,19 @@ Canvas = require('canvas'),
 sharp = require('sharp'),
 express = require('express'),
 twitter = require(__dirname + '/twitter.js'),
-app = express();
+app = express(),
+Twit = require('twit');
+
+
 
 app.use(express.static('public'));
 
+app.get('/', (request, response) => {
+  return response.send('ping');
+});
+
 app.all(`${process.env.BOT_ENDPOINT}`, function(req, res) {
+//app.get('/tweet', (req, res) => {
 
 
 console.log('* generating toppings...')
@@ -284,4 +292,49 @@ function addTopping(emojiName, emojiUnicode)
 {
     allToppings.push(new emoji(emojiName, emojiUnicode));
     console.log('added topping ' + emojiName)
+}
+
+function upload_image(imagePath, descrip)
+{
+    T = new Twit({
+        consumer_key:         process.env.consumer_key,
+        consumer_secret:      process.env.consumer_secret,
+        access_token:         process.env.access_token,
+        access_token_secret:  process.env.access_token_secret
+      })
+      
+    //now upload to twitter
+    var b64Img = fs.readFileSync(imagePath, { encoding: 'base64' });
+
+    T.post('media/upload', {media_data: b64Img }, 
+        function (err, data, response) 
+        {
+            if(err)
+            {
+                console.log('ERROR:' + err);
+            }
+            else
+            {
+                console.log('image uploaded, tweeting');
+                T.post('statuses/update', 
+                    {
+                            media_ids: new Array(data.media_id_string),
+                            status: descrip
+                    },
+                    function(err, data, response) 
+                    {
+                            if(err)
+                            {
+                                console.log('ERROR' + err);
+                                
+                            }
+                            else{ 
+                                console.log('success!');
+                            }
+                        }
+                    );
+                }
+            }
+    );
+
 }
