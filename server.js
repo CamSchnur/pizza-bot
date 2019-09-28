@@ -27,7 +27,7 @@ selectedToppings.push(get_random_topping());
 
 var cheese = new emoji('Yellow Circle', '\ud83d\udfe1');
 var sauce = new emoji('Red Circle', '\ud83d\udd34');
-var crust = new emoji('Brown Cirlce', '\ud83d\udfe4');
+var crust = new emoji('Brown Circle', '\ud83d\udfe4');
 
 console.log('* saving topping to png');
 make_pizza(selectedToppings);
