@@ -6,9 +6,9 @@ emoji = require(__dirname + '/emoji.js'),
 mergeImages = require('merge-images-v2'),
 Canvas = require('canvas'),
 sharp = require('sharp'),
-twitter = require(__dirname + '/twitter.js');
-toppings = require(__dirname + '/toppings.js');
-
+twitter = require(__dirname + '/twitter.js'),
+toppings = require(__dirname + '/toppings.js'),
+prepCook = require(__dirname + '/prep_cook.js');
 
 var allToppings;
 var cheese;
@@ -73,20 +73,21 @@ make_pizza: function(postResultToTwitter, hostedOnGlitch)
                                 return;
                             }
                             fs.writeFileSync('./.data/sauce.png', buffer);
-                        console.log("* Resizing Ingredients...")
-                        //now let's get our topping sizes right.
-                        sharp('./.data/cheese.png').resize(850, 850).toFile('./.data/cheese2.png', (err, info) => {
-                             sharp('./.data/sauce.png').resize(900, 900).toFile('./.data/sauce2.png', (err, info) => {
-                                sharp('./.data/top1.png').resize(100, 100).toFile('./.data/top1r.png', (err, info) => {
-                                    sharp('./.data/top2.png').resize(100, 100).toFile('./.data/top2r.png', (err, info) => {
-                        //now manipulate the image
-                                        mergeImages(get_prepared_ingredients(),
-                                            
-                                            {
-                                            Canvas: Canvas
-                                            })
+                            console.log("* Resizing Ingredients...")
+                            //now let's get our topping sizes right.
+                            sharp('./.data/cheese.png').resize(850, 850).toFile('./.data/cheese2.png', (err, info) => {
+                                sharp('./.data/sauce.png').resize(900, 900).toFile('./.data/sauce2.png', (err, info) => {
+                                    sharp('./.data/top1.png').resize(100, 100).toFile('./.data/top1r.png', (err, info) => {
+                                        sharp('./.data/top2.png').resize(100, 100).toFile('./.data/top2r.png', (err, info) => {
+                                            //now manipulate the image
+                                            console.log("* Baking at 500 degrees...");
+                                            mergeImages(prepCook.get_prepared_ingredients(),
+                                                {
+                                                Canvas: Canvas
+                                                })
                                             .then(function(b64){
                                                 var b64data = b64.replace(/^data:image\/png;base64,/, "");
+                                                console.log('* Saving output...')
                                                 fs.writeFile('./.data/result.png', b64data, 'base64', function(err)
                                                 {
                                                     if(err)
@@ -124,69 +125,13 @@ make_pizza: function(postResultToTwitter, hostedOnGlitch)
     
 }
 };
-function get_random_offset()
-{
-    var offset = (Math.random() * 10);
-
-    return offset - 5;
-
-}
 
 
 function get_random_topping()
 {
-    console.log('getting topping');
     var index = Math.floor(Math.random() * allToppings.length);
+    console.log('** Topping selected: ' + allToppings[index].emojiName);
     return allToppings[index];
 }
 
-function get_prepared_ingredients(hostedOnGlitch)
-{
-    var background;
-    if(hostedOnGlitch)
-    {
-        background = 'https://cdn.glitch.com/d4b86d30-396d-47c5-a181-d845c506ec1b%2Fwhite.png?v=1569695143892';
-    }
-    else
-    {
-        background = './.data/1.png';
-    }
-    return [
-
-        //
-        {src: background, x:0, y:0 },
-        {src: './.data/crust.png', x:388, y:0 },
-        {src: './.data/sauce2.png', x:438, y:50 },
-        {src: './.data/cheese2.png', x:463, y:75 },
-
-
-        {src: './.data/top1r.png', x:848+get_random_offset(), y:102+get_random_offset() },
-        {src: './.data/top1r.png', x:1121+get_random_offset(), y:290+get_random_offset() },
-        {src: './.data/top1r.png', x:920+get_random_offset(), y:787+get_random_offset() },
-        {src: './.data/top1r.png', x:688+get_random_offset(), y:730+get_random_offset() },
-        {src: './.data/top1r.png', x:516+get_random_offset(), y:501+get_random_offset() },
-        {src: './.data/top1r.png', x:602+get_random_offset(), y:220+get_random_offset() },
-        {src: './.data/top1r.png', x:667+get_random_offset(), y:387+get_random_offset() },
-        {src: './.data/top1r.png', x:838+get_random_offset(), y:407+get_random_offset() },
-        {src: './.data/top1r.png', x:865+get_random_offset(), y:268+get_random_offset() },
-        {src: './.data/top1r.png', x:1038+get_random_offset(), y:490+get_random_offset() },
-        {src: './.data/top1r.png', x:1121+get_random_offset(), y:600+get_random_offset() },
-        {src: './.data/top1r.png', x:845+get_random_offset(), y:658+get_random_offset() },
-
-
-        {src: './.data/top2r.png', x:700+get_random_offset(), y:135+get_random_offset() },
-        {src: './.data/top2r.png', x:1000+get_random_offset(), y:160+get_random_offset() } ,
-        {src: './.data/top2r.png', x:500+get_random_offset(), y:340+get_random_offset() } ,
-        {src: './.data/top2r.png', x:750+get_random_offset(), y:288+get_random_offset() } ,
-        {src: './.data/top2r.png', x:970+get_random_offset(), y:360+get_random_offset() } ,
-        {src: './.data/top2r.png', x:1160+get_random_offset(), y:441+get_random_offset() } ,
-        {src: './.data/top2r.png', x:667+get_random_offset(), y:560+get_random_offset() } ,
-        {src: './.data/top2r.png', x:794+get_random_offset(), y:519+get_random_offset() } ,
-        {src: './.data/top2r.png', x:548+get_random_offset(), y:650+get_random_offset() } ,
-        {src: './.data/top2r.png', x:968+get_random_offset(), y:600+get_random_offset() } ,
-        {src: './.data/top2r.png', x:796+get_random_offset(), y:770+get_random_offset() } ,
-        {src: './.data/top2r.png', x:1038+get_random_offset(), y:750+get_random_offset() } 
-
-    ]
-}
 
