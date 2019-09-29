@@ -103,8 +103,6 @@ make_pizza: function(postResultToTwitter)
                                             {src: './.data/top1r.png', x:845+get_random_offset(), y:658+get_random_offset() },
 
 
-
-
                                             {src: './.data/top2r.png', x:700+get_random_offset(), y:135+get_random_offset() },
                                             {src: './.data/top2r.png', x:1000+get_random_offset(), y:160+get_random_offset() } ,
                                             {src: './.data/top2r.png', x:500+get_random_offset(), y:340+get_random_offset() } ,
@@ -117,13 +115,7 @@ make_pizza: function(postResultToTwitter)
                                             {src: './.data/top2r.png', x:968+get_random_offset(), y:600+get_random_offset() } ,
                                             {src: './.data/top2r.png', x:796+get_random_offset(), y:770+get_random_offset() } ,
                                             {src: './.data/top2r.png', x:1038+get_random_offset(), y:750+get_random_offset() } 
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
+
                                         ],
                                             
                                             {
@@ -133,17 +125,24 @@ make_pizza: function(postResultToTwitter)
                                                 var b64data = b64.replace(/^data:image\/png;base64,/, "");
                                                 fs.writeFile('./.data/result.png', b64data, 'base64', function(err)
                                                 {
+                                                    if(err)
+                                                    {
+                                                        console.log(err);
+                                                        return;
+                                                    }
+
+                                                    var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' Pizza';
+                                                    console.log('Pizza created:' + description);
+
                                                     if(postResultToTwitter == true)
                                                     {
-                                                        //console.log(b64);
-                                                        //now upload it.
-                                                        var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' Pizza';
-                                                        console.log(description);
                                                         twitter.upload_image('./.data/result.png', description);
                                                         
-                                                        
-                                                        console.log('yay');
-                                                        console.log(err);
+                                                        console.log('Sent to Twitter.');
+                                                    }
+                                                    else
+                                                    {
+                                                        console.log('Skipping Twitter Upload.');
                                                     }
                                                 });
                                             });
