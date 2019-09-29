@@ -1,11 +1,12 @@
 var Twit = require('twit'),
+path = require('path'),
 fs = require('fs');
 var T;
 module.exports = 
   {
 upload_image: function(imagePath, descrip, hostedOnGlitch)
 {
-  var T = get_twitter_object();
+  var T = get_twitter_object(hostedOnGlitch);
 
   //now upload to twitter
   var b64Img = fs.readFileSync(imagePath, { encoding: 'base64' });

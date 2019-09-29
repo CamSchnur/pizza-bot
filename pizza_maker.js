@@ -79,38 +79,14 @@ make_pizza: function(postResultToTwitter, hostedOnGlitch)
                                 sharp('./.data/sauce.png').resize(900, 900).toFile('./.data/sauce2.png', (err, info) => {
                                     sharp('./.data/top1.png').resize(100, 100).toFile('./.data/top1r.png', (err, info) => {
                                         sharp('./.data/top2.png').resize(100, 100).toFile('./.data/top2r.png', (err, info) => {
-                                            //now manipulate the image
+                                            //now combine the images,
                                             console.log("* Baking at 500 degrees...");
-                                            mergeImages(prepCook.get_prepared_ingredients(),
-                                                {
-                                                Canvas: Canvas
-                                                })
-                                            .then(function(b64){
-                                                var b64data = b64.replace(/^data:image\/png;base64,/, "");
-                                                console.log('* Saving output...')
-                                                fs.writeFile('./.data/result.png', b64data, 'base64', function(err)
-                                                {
-                                                    if(err)
-                                                    {
-                                                        console.log(err);
-                                                        return;
-                                                    }
-
-                                                    var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' Pizza';
-                                                    console.log('* Pizza created: ' + description);
-
-                                                    if(postResultToTwitter == true)
-                                                    {
-                                                        twitter.upload_image('./.data/result.png', description, hostedOnGlitch);
-                                                        
-                                                        console.log('* Sent to Twitter.');
-                                                    }
-                                                    else
-                                                    {
-                                                        console.log('* Skipping Twitter Upload.');
-                                                    }
-                                                });
-                                            });
+                                            var canvasObj = {
+                                                            Canvas: Canvas
+                                                            };
+                                            mergeImages(prepCook.get_prepared_ingredients(), canvasObj)
+                                            //and output the result
+                                            .then(b64 => output_result(b64, postResultToTwitter, hostedOnGlitch));
                                         });
                                     });
                             });
@@ -126,7 +102,33 @@ make_pizza: function(postResultToTwitter, hostedOnGlitch)
 }
 };
 
+function output_result(b64ImageData, postResultToTwitter, hostedOnGlitch)
+{
+    var b64data = b64ImageData.replace(/^data:image\/png;base64,/, "");
+    console.log('* Saving output...')
+    fs.writeFile('./.data/result.png', b64data, 'base64', function(err)
+    {
+        if(err)
+        {
+            console.log(err);
+            return;
+        }
 
+        var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' Pizza';
+        console.log('* Pizza created: ' + description);
+
+        if(postResultToTwitter == true)
+        {
+            twitter.upload_image('./.data/result.png', description, hostedOnGlitch);
+            
+            console.log('* Sent to Twitter.');
+        }
+        else
+        {
+            console.log('* Skipping Twitter Upload.');
+        }
+    });
+}
 function get_random_topping()
 {
     var index = Math.floor(Math.random() * allToppings.length);
