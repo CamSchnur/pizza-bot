@@ -1,7 +1,8 @@
 var pizza_maker = require(__dirname + '/pizza_maker.js'),
-express = require('express');
+express = require('express'),
+app = express();
 
-const POST_RESULT_TO_TWITTER = false;
+const POST_RESULT_TO_TWITTER = true;
 const HOSTED_ON_GLITCH = true;
 
 app.use(express.static('public'));

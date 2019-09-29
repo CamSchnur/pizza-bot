@@ -20,6 +20,14 @@ module.exports =
   {
 make_pizza: function(postResultToTwitter, hostedOnGlitch)
 {
+    if(hostedOnGlitch == true)
+    {
+      console.log('* Pizza Order Received... [hosted on glitch]');
+    }
+    else
+    {
+      console.log('* Pizza Order Received... [running locally]');
+    }
     console.log('* Generating Toppings...')
     allToppings = toppings.generate_toppings_list();
 
@@ -84,7 +92,7 @@ make_pizza: function(postResultToTwitter, hostedOnGlitch)
                                             var canvasObj = {
                                                             Canvas: Canvas
                                                             };
-                                            mergeImages(prepCook.get_prepared_ingredients(), canvasObj)
+                                            mergeImages(prepCook.get_prepared_ingredients(hostedOnGlitch), canvasObj)
                                             //and output the result
                                             .then(b64 => output_result(b64, postResultToTwitter, hostedOnGlitch));
                                         });

@@ -26,13 +26,14 @@ using [canvas](https://www.npmjs.com/package/canvas) which uses the MIT license
 
 using [express](https://www.npmjs.com/package/express) which uses the MIT license
 
-#### Howto
+#### How to use
 
 ##### Glitch version 
 If you're remixing this bot on Glitch, you'll just need to:
 
 1. Add the following keys to your .env file:
 
+```
 consumer_key='w'
 
 consumer_secret='x'
@@ -42,6 +43,7 @@ access_token='y'
 access_token_secret='z'
 
 BOT_ENDPOINT='/someEndpointName'
+```
 
 ...just replace with your own values.
 
@@ -54,11 +56,18 @@ To run this locally (can be useful for testing or debugging), download the code 
 
 
 
-`var config = {
+```
+var config = {
     consumer_key: 'w',
     consumer_secret: 'x',
     access_token: 'y',
     access_token_secret: 'z'
 }
 
-module.exports = config;`
+module.exports = config;
+```
+
+Then, you can start the bot with the command:
+```
+node server_local.js
+```

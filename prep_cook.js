@@ -3,7 +3,7 @@ module.exports =
     get_prepared_ingredients: function(hostedOnGlitch)
     {
         var background;
-        if(hostedOnGlitch)
+        if(hostedOnGlitch == true)
         {
             background = 'https://cdn.glitch.com/d4b86d30-396d-47c5-a181-d845c506ec1b%2Fwhite.png?v=1569695143892';
         }
