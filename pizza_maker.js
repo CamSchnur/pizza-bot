@@ -7,9 +7,8 @@ mergeImages = require('merge-images-v2'),
 Canvas = require('canvas'),
 sharp = require('sharp'),
 express = require('express'),
-twitter = require(__dirname + '/twitter.js'),
-app = express(),
-Twit = require('twit');
+twitter = require(__dirname + '/twitter.js');
+
 
 var allToppings;
 var cheese;
@@ -17,40 +16,25 @@ var sauce;
 var crust;
 var selectedToppings;
 
-app.use(express.static('public'));
-
-app.get('/', (request, response) => {
-  return response.send('ping');
-});
-
-app.all(`${process.env.BOT_ENDPOINT}`, function(req, res) {
-//app.get('/tweet', (req, res) => {
-
-console.log('* generating toppings...')
-allToppings = new Array();
-generate_toppings_list();
-
-console.log('* selecting rando toppings...')
-selectedToppings = new Array();
-selectedToppings.push(get_random_topping());
-selectedToppings.push(get_random_topping());
-
-cheese = new emoji('Yellow Circle', '\ud83d\udfe1');
-sauce = new emoji('Red Circle', '\ud83d\udd34');
-crust = new emoji('Brown Circle', '\ud83d\udfe4');
-
-console.log('* saving topping to png');
-make_pizza(selectedToppings);
-return res.send('success!');
-});
-
-var listener = app.listen(process.env.PORT, function()
+module.exports = 
+  {
+make_pizza: function(postResultToTwitter)
 {
-    console.log('bot is listening on port #' + listener.address().port);
-});
+    console.log('* generating toppings...')
+    allToppings = new Array();
+    generate_toppings_list();
 
-function make_pizza(selectedToppings)
-{
+    console.log('* selecting rando toppings...')
+    selectedToppings = new Array();
+    selectedToppings.push(get_random_topping());
+    selectedToppings.push(get_random_topping());
+
+    cheese = new emoji('Yellow Circle', '\ud83d\udfe1');
+    sauce = new emoji('Red Circle', '\ud83d\udd34');
+    crust = new emoji('Brown Circle', '\ud83d\udfe4');
+
+    console.log('* saving topping to png');
+    
     svg2img(selectedToppings[0].emojiPath, {'width':1000, 'height':1000}, function(error, buffer) {
         if(error)
         {
@@ -149,16 +133,18 @@ function make_pizza(selectedToppings)
                                                 var b64data = b64.replace(/^data:image\/png;base64,/, "");
                                                 fs.writeFile('./.data/result.png', b64data, 'base64', function(err)
                                                 {
-                                                    //console.log(b64);
-                                                    //now upload it.
-                                                    var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' Pizza';
-                                                    console.log(description);
-                                                    twitter.upload_image('./.data/result.png', description);
-                                                    
-                                                    
-                                                    console.log('yay');
-                                                    console.log(err);
-                                                  
+                                                    if(postResultToTwitter == true)
+                                                    {
+                                                        //console.log(b64);
+                                                        //now upload it.
+                                                        var description = selectedToppings[0].emojiName + ' and ' + selectedToppings[1].emojiName + ' Pizza';
+                                                        console.log(description);
+                                                        twitter.upload_image('./.data/result.png', description);
+                                                        
+                                                        
+                                                        console.log('yay');
+                                                        console.log(err);
+                                                    }
                                                 });
                                             });
                                         });
@@ -174,7 +160,7 @@ function make_pizza(selectedToppings)
 
     
 }
-
+};
 function get_random_offset()
 {
     var offset = (Math.random() * 10);
