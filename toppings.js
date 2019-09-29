@@ -102,14 +102,14 @@ generate_toppings_list: function()
     addTopping('Spaghetti', '\ud83c\udf5d');
     //spaghetti
     //flan
+
+    console.log('* Toppings Generated.');
     return allToppings;
 
-    
 }
 };
 
 function addTopping(emojiName, emojiUnicode)
 {
     allToppings.push(new emoji(emojiName, emojiUnicode));
-    console.log('added topping ' + emojiName)
 }
