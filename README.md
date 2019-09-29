@@ -28,6 +28,7 @@ using [express](https://www.npmjs.com/package/express) which uses the MIT licens
 
 #### Howto
 
+##### Glitch version 
 If you're remixing this bot on Glitch, you'll just need to:
 
 1. Add the following keys to your .env file:
@@ -46,3 +47,18 @@ BOT_ENDPOINT='/someEndpointName'
 
 2. You'll then need to set up something like [cron-job.org](https://cron-job.org) to hit your endpoint every 60 minutes.  
 You can do an HTTP get request of the format https://your-project-name.glitch.me/someEndpointName.
+
+
+##### Running locally
+To run this locally (can be useful for testing or debugging), download the code from Glitch or [from my github repo](https://github.com/camschnur/pizza-bot).  Instead of using a .env file, create a file in the root called config.js, and use this format:
+
+
+
+`var config = {
+    consumer_key: 'w',
+    consumer_secret: 'x',
+    access_token: 'y',
+    access_token_secret: 'z'
+}
+
+module.exports = config;`
