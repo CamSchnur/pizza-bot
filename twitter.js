@@ -35,7 +35,7 @@ upload_image: function(imagePath, descrip, hostedOnGlitch)
                           }
                           else{ 
                               console.log('success!');
-                            fs.deleteFileSync(imagePath);
+                              //fs.unlinkSync(imagePath);
                           }
                       }
                   );
