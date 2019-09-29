@@ -154,10 +154,10 @@ function get_prepared_ingredients(hostedOnGlitch)
     return [
 
         //
-        {src: background, x:0+get_random_offset(), y:0+get_random_offset() },
-        {src: './.data/crust.png', x:388+get_random_offset(), y:0+get_random_offset() },
-        {src: './.data/sauce2.png', x:438+get_random_offset(), y:50+get_random_offset() },
-        {src: './.data/cheese2.png', x:463+get_random_offset(), y:75+get_random_offset() },
+        {src: background, x:0, y:0 },
+        {src: './.data/crust.png', x:388, y:0 },
+        {src: './.data/sauce2.png', x:438, y:50 },
+        {src: './.data/cheese2.png', x:463, y:75 },
 
 
         {src: './.data/top1r.png', x:848+get_random_offset(), y:102+get_random_offset() },
