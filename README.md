@@ -24,6 +24,8 @@ using [merge-images-v2](https://www.npmjs.com/package/merge-images-v2) which use
 
 using [canvas](https://www.npmjs.com/package/canvas) which uses the MIT license
 
+using [express](https://www.npmjs.com/package/express) which uses the MIT license
+
 #### Howto
 
 If you're remixing this bot on Glitch, you'll just need to:
