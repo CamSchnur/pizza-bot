@@ -18,7 +18,7 @@ var selectedToppings;
 
 module.exports = 
   {
-make_pizza: function(postResultToTwitter)
+make_pizza: function(postResultToTwitter, hostedOnGlitch)
 {
     console.log('* Generating Toppings...')
     allToppings = toppings.generate_toppings_list();
@@ -135,7 +135,7 @@ make_pizza: function(postResultToTwitter)
 
                                                     if(postResultToTwitter == true)
                                                     {
-                                                        twitter.upload_image('./.data/result.png', description);
+                                                        twitter.upload_image('./.data/result.png', description, hostedOnGlitch);
                                                         
                                                         console.log('* Sent to Twitter.');
                                                     }

@@ -1,4 +1,5 @@
-var pizza_maker = require(__dirname + '/pizza_maker.js');
+var pizza_maker = require(__dirname + '/pizza_maker.js'),
+express = require('express');
 
 const POST_RESULT_TO_TWITTER = false;
 
@@ -10,7 +11,7 @@ app.get('/', (request, response) => {
 
 app.all(`${process.env.BOT_ENDPOINT}`, function(req, res) {
 
-    pizza_maker.make_pizza(POST_RESULT_TO_TWITTER);
+    pizza_maker.make_pizza(POST_RESULT_TO_TWITTER, true);
     return res.send('success!');
 });
 
