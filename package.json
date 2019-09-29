@@ -2,11 +2,10 @@
   "name": "pizza-bot",
   "version": "1.0.0",
   "description": "PizzaBot!",
-  "main": "server_glitch.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server_glitch.js",
-    "start local": "node server_local.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
